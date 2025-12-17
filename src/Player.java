@@ -1,34 +1,25 @@
 import java.util.ArrayList;
 
-public class Player {
-    private String name;
-    private int money;
+public class Player extends Character{
     private int xLocation;
     private int yLocation;
+    private int health;
     private ArrayList<Item> inventory;
 
     public Player(){
-        this.name = "unknown";
-        this.money = 0;
+        super();
         this.xLocation = 0;
         this.yLocation = 0;
-        this.inventory = new ArrayList<Item>();
+        this.inventory = new ArrayList<>();
+        this.health = 100;
     };
 
-    public Player(String name, int money, int xLocation, int yLocation){
-        this.name = name;
-        this.money = money;
+    public Player(String name, int stamina, int xLocation, int yLocation, int health){
+        super(name, stamina);
         this.xLocation = xLocation;
         this.yLocation = yLocation;
-        this.inventory= new ArrayList<Item>();
-    }
-    
-    public String getName(){
-        return this.name;
-    }
-
-    public int getMoney(){
-        return this.money;
+        this.inventory= new ArrayList<>();
+        this.health = health;
     }
 
     public int getXLocation(){
@@ -36,6 +27,14 @@ public class Player {
     }
     public int getYLocation(){
         return this.yLocation;
+    }
+
+    public int getHealth(){
+        return this.health;
+    }
+
+    public void heal(int amount){
+        this.health += amount;
     }
     
     public void move(int xMove, int yMove){
