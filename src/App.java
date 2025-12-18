@@ -1,8 +1,10 @@
+import java.util.Scanner;
+
 public class App {
     public static void main(String[] args) throws Exception {
-        Player neel = new Player();
-        neel.addItem(new Key());
-        System.out.println(neel.printInventory());
+        Scanner input = new Scanner(System.in);
+        Game game = new Game(input);
+        game.init();
         
     }
 }

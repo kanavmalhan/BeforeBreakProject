@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Player extends Character{
     private int xLocation;
     private int yLocation;
-    private int health;
+    private int readiness;
     private ArrayList<Item> inventory;
 
     public Player(){
@@ -11,15 +11,15 @@ public class Player extends Character{
         this.xLocation = 0;
         this.yLocation = 0;
         this.inventory = new ArrayList<>();
-        this.health = 100;
+        this.readiness = 100;
     };
 
-    public Player(String name, int stamina, int xLocation, int yLocation, int health){
+    public Player(String name, int stamina, int xLocation, int yLocation, int readiness){
         super(name, stamina);
         this.xLocation = xLocation;
         this.yLocation = yLocation;
         this.inventory= new ArrayList<>();
-        this.health = health;
+        this.readiness = readiness;
     }
 
     public int getXLocation(){
@@ -29,12 +29,8 @@ public class Player extends Character{
         return this.yLocation;
     }
 
-    public int getHealth(){
-        return this.health;
-    }
-
-    public void heal(int amount){
-        this.health += amount;
+    public int getReadiness(){
+        return this.readiness;
     }
     
     public void move(int xMove, int yMove){
