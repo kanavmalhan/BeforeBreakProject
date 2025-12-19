@@ -5,6 +5,8 @@ public class App {
         Scanner input = new Scanner(System.in);
         Game game = new Game(input);
         game.init();
-        
+        while(true){
+            game.update();
+        }
     }
 }

@@ -34,8 +34,12 @@ public class Player extends Character{
     }
     
     public void move(int xMove, int yMove){
-        this.xLocation += xMove;
-        this.yLocation += yMove;
+        if(this.xLocation + xMove >= 0 && this.xLocation + xMove <Constants.X_SIZE.getValue()){
+            this.xLocation += xMove;
+            if(this.yLocation + yMove >= 0 && this.yLocation+yMove <Constants.Y_SIZE.getValue()){
+                this.yLocation += yMove;  
+            }
+        }    
     }
 
     public Item getItemFromInventory(int inventorySlot){
@@ -52,7 +56,7 @@ public class Player extends Character{
             Item item = inventory.get(i);
             output = output + ", " + item.toString();
         }
-        return output;
+        return "["+output+"]";
     }
     public void addItem(Item newItem){
         this.inventory.add(newItem);
