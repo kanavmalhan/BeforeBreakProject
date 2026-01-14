@@ -1,4 +1,4 @@
-public class NonPlayerCharacter extends Character{
+public abstract class NonPlayerCharacter extends Character{
     private boolean trustsPlayer;
     private String role;
 
@@ -9,12 +9,8 @@ public class NonPlayerCharacter extends Character{
     }
 
 
-    public void talk(Player player){
+    public abstract void talk(Player player);
 
-    };
-
-    public void evaluate(Player player){
-
-    };
+    public abstract boolean evaluate(Player player);
     
 }

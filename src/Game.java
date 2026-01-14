@@ -18,7 +18,7 @@ public class Game {
     public void init(){
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 10; j++){
-                this.board[i][j] = new Location(i, j, "Empty Block");
+                this.board[i][j] = new Location(i, j, "Empty Block", null);
             }
         } 
 
@@ -82,7 +82,7 @@ public class Game {
     }
 
     public void printCommands(){
-        System.out.println("Type 'move [direction]' to move in a given direction \nType look to scan your surroundings \nType 'exit' to exit the game ");
+        System.out.println("Type 'move [direction]' to move in a given direction \nType 'look' to scan your surroundings \nType 'exit' to exit the game ");
     }
 
     public String printBoard(){
@@ -103,6 +103,9 @@ public class Game {
                     if(Math.abs(currentX-i) <= Constants.VISIBILITY.getValue()){
                         if(Math.abs(currentY-j) <= Constants.VISIBILITY.getValue()){
                             output += "\n"+this.board[i][j].getName() + " is " + (i-currentX) + " blocks away in the X direction, and " + (i-currentY) + " blocks away in the Y direction";
+                            if(this.board[i][j].hasNPC()){
+                                output += " " + this.board[i][j].getNPC().getName() + " Is waiting to speak to you at " + this.board[i][j].getName();
+                            }
                         }
                     }
 
@@ -113,6 +116,6 @@ public class Game {
     }
 //Puts locations in their spots
     public void initializeBoard(){
-        this.board[6][6] = new Location(6, 6, "Cleats Shop");
+        this.board[6][6] = new Location(6, 6, "Cleats Shop", null);
     }
 }
