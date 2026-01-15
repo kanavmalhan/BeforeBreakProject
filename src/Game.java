@@ -34,8 +34,19 @@ public class Game {
         System.out.println("By tonight, the coach will decide who makes the team \nYou have one day to prepare");
         System.out.println("Train wisely. Manage your stamina");
         System.out.println("What you do today will decide your future");
-        System.out.println("You arrive at Training Square \nIt is " + this.time + "\nYou have: " + player.getStamina() + " stamina" + "\nYou have: " + player.getReadiness() + " readiness");
         System.out.println("You have to achieve 100 readiness to be approved for your trial. \nYou also have to have ample stamina so that you can perform well at the trial. \nGood luck");
+        System.out.println("Speak with Coach Miller first, he can guide you");
+        printCurrentStats();
+        System.out.println("Type 'help' to see available commands");
+    }
+
+    public void printCurrentStats(){
+        System.out.println("==================================");
+        System.out.println("CURRENT STATS");
+        System.out.println("It is " + this.time + "\nYou have: " + player.getStamina() + " stamina" + "\nYou have: " + player.getReadiness() + " readiness");
+        System.out.println("=========================");
+        System.out.println("COORDINATES");
+        System.out.println(this.player.getXLocation() + ", " + this.player.getYLocation());
     }
 
     public void update(){
@@ -72,7 +83,7 @@ public class Game {
                 System.out.println(this.player.getXLocation());
                 System.out.println(this.player.getYLocation());    
                 break;
-            case "print board":
+            case "map":
                 System.out.println(printBoard());
                 break;
             case "look":
@@ -129,8 +140,7 @@ public class Game {
                         if(Math.abs(currentY-j) <= Constants.VISIBILITY.getValue()){
                             output += "\n"+this.board[i][j].getName() + " is " + (i-currentX) + " blocks away in the X direction, and " + (i-currentY) + " blocks away in the Y direction";
                             if(this.board[i][j].hasNPC()){
-                                System.out.println("Has npc");
-                                output += "\n" + this.board[i][j].getNPC().getName() + " is waiting to speak to you at " + this.board[i][j].getName();
+                                output += "\n" + this.board[i][j].getNPC().getName() + " is currently at " + this.board[i][j].getName();
                             }
                         }
                     }
