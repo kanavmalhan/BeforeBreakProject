@@ -7,6 +7,8 @@ public class Game {
     private Scanner input;
     private String name;
     private Player player;
+    private CleatsMerchant cleatsMerchant = new CleatsMerchant("Neel Patel", "Cleats Merchant");
+    private Coach coach = new Coach("Coach Miller", "Coach");
 
     public Game(Scanner input){
         this.input = input;
@@ -78,7 +80,30 @@ public class Game {
                 break;
             case "inventory":
                 System.out.println(this.player.printInventory());
+            case "talk":
+                if(this.isOnLocation()){
+                    if(this.board[this.player.getXLocation()][this.player.getYLocation()].hasNPC()){
+                        this.board[this.player.getXLocation()][this.player.getYLocation()].getNPC().talk(this.player, false);
+                    }
+
+                }
         }
+    }
+
+
+    public boolean isOnLocation(){
+        for(int i = 0; i < Constants.X_SIZE.getValue(); i++){
+            for(int j = 0; j < Constants.Y_SIZE.getValue(); j++){
+                if(this.board[i][j].getName() != "Empty Block"){
+                    if(this.board[i][j].getXLocation() == this.player.getXLocation() && this.board[i][j].getYLocation() == this.player.getYLocation()){
+                        return true;
+                    }
+                }
+            }
+
+        }
+
+        return false;
     }
 
     public void printCommands(){
@@ -104,7 +129,8 @@ public class Game {
                         if(Math.abs(currentY-j) <= Constants.VISIBILITY.getValue()){
                             output += "\n"+this.board[i][j].getName() + " is " + (i-currentX) + " blocks away in the X direction, and " + (i-currentY) + " blocks away in the Y direction";
                             if(this.board[i][j].hasNPC()){
-                                output += " " + this.board[i][j].getNPC().getName() + " Is waiting to speak to you at " + this.board[i][j].getName();
+                                System.out.println("Has npc");
+                                output += "\n" + this.board[i][j].getNPC().getName() + " is waiting to speak to you at " + this.board[i][j].getName();
                             }
                         }
                     }
@@ -116,6 +142,8 @@ public class Game {
     }
 //Puts locations in their spots
     public void initializeBoard(){
-        this.board[6][6] = new Location(6, 6, "Cleats Shop", null);
+        this.board[6][6] = new Location(6, 6, "Cleats Shop", cleatsMerchant);
+        this.board[4][4] = new Location(4, 4, "Coach's Office", coach);
+        System.out.println(this.board[4][4].hasNPC());
     }
 }

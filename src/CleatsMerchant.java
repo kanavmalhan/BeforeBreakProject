@@ -3,7 +3,7 @@ public class CleatsMerchant extends NonPlayerCharacter{
         super(name, role);
     };
     @Override
-    public void talk(Player player){
+    public void talk(Player player, boolean isFirstConversation){
 
     };
 

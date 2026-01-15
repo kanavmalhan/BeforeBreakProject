@@ -1,14 +1,22 @@
 public class Location {
-    private int xLocation;
-    private int yLocation;
-    private String name;
-    private NonPlayerCharacter npc;
+    private final int xLocation;
+    private final int yLocation;
+    private final String name;
+    private final NonPlayerCharacter npc;
 
     public Location(int xLocation, int yLocation, String name, NonPlayerCharacter npc){
         this.xLocation = xLocation;
         this.yLocation = yLocation;
         this.name = name;
         this.npc = npc;
+    }
+
+    public int getXLocation(){
+        return xLocation;
+    }
+    
+    public int getYLocation(){
+        return yLocation;
     }
 
     public String toString(){
