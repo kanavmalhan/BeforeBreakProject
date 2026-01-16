@@ -1,159 +1,126 @@
 import java.util.Scanner;
 
-
 public class Game {
     private Location[][] board;
-    private TimeOfDay time;
-    private Scanner input;
-    private String name;
     private Player player;
-    private CleatsMerchant cleatsMerchant = new CleatsMerchant("Neel Patel", "Cleats Merchant");
-    private Coach coach = new Coach("Coach Miller", "Coach");
+    private Scanner input;
 
-    public Game(Scanner input){
+    public Game(Scanner input) {
         this.input = input;
-        this.board = new Location[Constants.X_SIZE.getValue()][Constants.Y_SIZE.getValue()];
-        this.time = TimeOfDay.MORNING;
-        this.name = "Matchday: The Final Trial";
-    }
-//Initializes the board. Prints initial directions. 
-    public void init(){
-        for(int i = 0; i < 10; i++){
-            for(int j = 0; j < 10; j++){
-                this.board[i][j] = new Location(i, j, "Empty Block", null);
-            }
-        } 
-
-        initializeBoard();
-
-        System.out.println("Welcome to " + this.name);
-        System.out.println("What is your name?");
-        String name = this.input.nextLine();
-        System.out.println("Hello, " + name);
-        this.player = new Player(name, 100, 5, 5, 0);
-        System.out.println("By tonight, the coach will decide who makes the team \nYou have one day to prepare");
-        System.out.println("Train wisely. Manage your stamina");
-        System.out.println("What you do today will decide your future");
-        System.out.println("You have to achieve 100 readiness to be approved for your trial. \nYou also have to have ample stamina so that you can perform well at the trial. \nGood luck");
-        System.out.println("Speak with Coach Miller first, he can guide you");
-        printCurrentStats();
-        System.out.println("Type 'help' to see available commands");
+        board = new Location[10][10];
     }
 
-    public void printCurrentStats(){
-        System.out.println("==================================");
-        System.out.println("CURRENT STATS");
-        System.out.println("It is " + this.time + "\nYou have: " + player.getStamina() + " stamina" + "\nYou have: " + player.getReadiness() + " readiness");
-        System.out.println("=========================");
-        System.out.println("COORDINATES");
-        System.out.println(this.player.getXLocation() + ", " + this.player.getYLocation());
+    public void init() {
+        player = new Player("Player");
+
+        for (int i = 0; i < 10; i++)
+            for (int j = 0; j < 10; j++)
+                board[i][j] = new Location("Empty Block", null);
+
+        board[4][4] = new Location("Coach's Office", new Coach());
+
+        board[6][6] = new Location(
+            "Cleats Store",
+            new RiddleNPC(
+                "Shop Owner",
+                "I grip the ground but never move. I have studs but no legs. What am I?",
+                "cleats",
+                new Cleats()
+            )
+        );
+
+        board[3][7] = new Location(
+            "Grocery Store",
+            new RiddleNPC(
+                "Cashier",
+                "What has a heart that doesn’t beat?",
+                "artichoke",
+                new EnergyBar()
+            )
+        );
+
+        board[7][3] = new Location(
+            "Gym",
+            new RiddleNPC(
+                "Trainer",
+                "The more you use it, the stronger it gets. What is it?",
+                "muscle",
+                new Item() {
+                    public void use(Player p) {
+                        p.addReadiness(50);
+                        System.out.println("Sweat drips down your face as your body adapts.");
+                    }
+                }
+            )
+        );
+
+        System.out.println("MATCHDAY: THE FINAL TRIAL");
+        System.out.println("Commands: move north/south/east/west, look, talk, map, stats, inventory, exit");
     }
 
-    public void update(){
-        parseCommand(this.input.nextLine());
-    }
+    public void update() {
+        System.out.print("\n> ");
+        String cmd = input.nextLine();
 
-    public void parseCommand(String command){
-        switch(command){
-            case "help":
-                printCommands();
-                break;
-            case "exit":
-                System.out.println("Thank you for playing " + this.name);
-                System.exit(0);
-                break;
-            case "move north":
-                this.player.move(0, 1);
-                System.out.println(this.player.getXLocation());
-                System.out.println(this.player.getYLocation());
-                break;
-            case "move south":
-                this.player.move(0, -1);
-                System.out.println(this.player.getXLocation());
-                System.out.println(this.player.getYLocation());    
-                break;
-            case "move east":
-                this.player.move(1, 0);
-                System.out.println(this.player.getXLocation());
-                System.out.println(this.player.getYLocation());    
+        switch (cmd) {
+            case "move north": player.move(0, 1); break;
+            case "move south": player.move(0, -1); break;
+            case "move east": player.move(1, 0); break;
+            case "move west": player.move(-1, 0); break;
 
-                break;
-            case "move west":
-                this.player.move(-1, 0);
-                System.out.println(this.player.getXLocation());
-                System.out.println(this.player.getYLocation());    
-                break;
-            case "map":
-                System.out.println(printBoard());
-                break;
             case "look":
-                System.out.println(lookAround(this.player.getXLocation(), this.player.getYLocation()));
+                lookAround();
                 break;
-            case "inventory":
-                System.out.println(this.player.printInventory());
+
+            case "map":
+                printMap();
+                break;
+
             case "talk":
-                if(this.isOnLocation()){
-                    if(this.board[this.player.getXLocation()][this.player.getYLocation()].hasNPC()){
-                        this.board[this.player.getXLocation()][this.player.getYLocation()].getNPC().talk(this.player, false);
-                    }
+                board[player.getX()][player.getY()].interact(player);
+                break;
 
-                }
+            case "stats":
+                System.out.println("Stamina: " + player.getStamina());
+                System.out.println("Readiness: " + player.getReadiness());
+                break;
+
+            case "inventory":
+                System.out.println(player.inventoryString());
+                break;
+
+            case "exit":
+                System.exit(0);
         }
     }
 
-
-    public boolean isOnLocation(){
-        for(int i = 0; i < Constants.X_SIZE.getValue(); i++){
-            for(int j = 0; j < Constants.Y_SIZE.getValue(); j++){
-                if(this.board[i][j].getName() != "Empty Block"){
-                    if(this.board[i][j].getXLocation() == this.player.getXLocation() && this.board[i][j].getYLocation() == this.player.getYLocation()){
-                        return true;
+    private void lookAround() {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (!board[i][j].getName().equals("Empty Block")) {
+                    int dx = i - player.getX();
+                    int dy = j - player.getY();
+                    if (Math.abs(dx) <= 5 && Math.abs(dy) <= 5) {
+                        System.out.println(board[i][j].getName() +
+                                " is " + dx + " east/west and " + dy + " north/south.");
                     }
-                }
-            }
-
-        }
-
-        return false;
-    }
-
-    public void printCommands(){
-        System.out.println("Type 'move [direction]' to move in a given direction \nType 'look' to scan your surroundings \nType 'exit' to exit the game ");
-    }
-
-    public String printBoard(){
-        String output = "";
-        for(int i = 0; i < Constants.X_SIZE.getValue(); i++){
-            for(int j = 0; j < Constants.Y_SIZE.getValue(); j++){
-                output += this.board[i][j] + ", ";
-            }
-        }
-        return output;
-    }
-//Looks for named locations within a certain radius of the player and gives the player directions to the given locations
-    public String lookAround(int currentX, int currentY){
-        String output = "";
-        for(int i = 0; i < Constants.X_SIZE.getValue(); i++){
-            for(int j = 0; j < Constants.Y_SIZE.getValue(); j++){
-                if(this.board[i][j].getName() != "Empty Block"){
-                    if(Math.abs(currentX-i) <= Constants.VISIBILITY.getValue()){
-                        if(Math.abs(currentY-j) <= Constants.VISIBILITY.getValue()){
-                            output += "\n"+this.board[i][j].getName() + " is " + (i-currentX) + " blocks away in the X direction, and " + (i-currentY) + " blocks away in the Y direction";
-                            if(this.board[i][j].hasNPC()){
-                                output += "\n" + this.board[i][j].getNPC().getName() + " is currently at " + this.board[i][j].getName();
-                            }
-                        }
-                    }
-
                 }
             }
         }
-        return output;
     }
-//Puts locations in their spots
-    public void initializeBoard(){
-        this.board[6][6] = new Location(6, 6, "Cleats Shop", cleatsMerchant);
-        this.board[4][4] = new Location(4, 4, "Coach's Office", coach);
-        System.out.println(this.board[4][4].hasNPC());
+
+    private void printMap() {
+        for (int y = 9; y >= 0; y--) {
+            for (int x = 0; x < 10; x++) {
+                if (player.getX() == x && player.getY() == y) {
+                    System.out.print("[P]");
+                } else if (!board[x][y].getName().equals("Empty Block")) {
+                    System.out.print("[L]");
+                } else {
+                    System.out.print("[ ]");
+                }
+            }
+            System.out.println();
+        }
     }
 }

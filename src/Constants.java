@@ -1,17 +1,14 @@
-
 public enum Constants {
     X_SIZE(10),
-    Y_SIZE(10),
-    VISIBILITY(5);
+    Y_SIZE(10);
 
-    private final int value;
+    private int v;
 
-    private Constants(int value){
-        this.value = value;
+    Constants(int v) {
+        this.v = v;
     }
 
-    public int getValue(){
-        return this.value;
+    public int getValue() {
+        return v;
     }
-
 }

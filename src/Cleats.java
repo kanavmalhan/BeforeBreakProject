@@ -1,10 +1,11 @@
-public class Cleats extends Item{
-    @Override
-    public void use(){
-
+public class Cleats extends Item {
+    public Cleats() {
+        this.name = "Professional Soccer Cleats";
     }
-    @Override
-    public String toString(){
-        return " ";
+
+    public void use(Player player) {
+        player.obtainCleats();
+        player.addReadiness(50);
+        System.out.println("You lace up the cleats. The ground feels different beneath your feet.");
     }
 }

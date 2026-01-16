@@ -1,70 +1,54 @@
 import java.util.ArrayList;
 
-public class Player extends Character{
-    private int xLocation;
-    private int yLocation;
+public class Player extends Character {
+    private int x;
+    private int y;
     private int readiness;
+    private boolean hasCleats;
     private ArrayList<Item> inventory;
 
-    public Player(){
-        super();
-        this.xLocation = 0;
-        this.yLocation = 0;
+    public Player(String name) {
+        super(name, 100);
+        this.x = 5;
+        this.y = 5;
+        this.readiness = 0;
+        this.hasCleats = false;
         this.inventory = new ArrayList<>();
-        this.readiness = 100;
-    };
-
-    public Player(String name, int stamina, int xLocation, int yLocation, int readiness){
-        super(name, stamina);
-        this.xLocation = xLocation;
-        this.yLocation = yLocation;
-        this.inventory= new ArrayList<>();
-        this.readiness = readiness;
     }
 
-    public int getXLocation(){
-        return this.xLocation;
-    }
-    public int getYLocation(){
-        return this.yLocation;
-    }
-
-    public int getReadiness(){
-        return this.readiness;
-    }
-    
-    public void move(int xMove, int yMove){
-        if(this.xLocation + xMove >= 0 && this.xLocation + xMove <Constants.X_SIZE.getValue()){
-            this.xLocation += xMove;
-            if(this.yLocation + yMove >= 0 && this.yLocation+yMove <Constants.Y_SIZE.getValue()){
-                this.yLocation += yMove;  
-            }
-        }    
+    public void move(int dx, int dy) {
+        x += dx;
+        y += dy;
+        addStamina(-5);
     }
 
-    public Item getItemFromInventory(int inventorySlot){
-        return this.inventory.get(inventorySlot);
+    public int getX() { return x; }
+    public int getY() { return y; }
+
+    public int getReadiness() {
+        return readiness;
     }
 
-    public ArrayList<Item> getInventory(){
-        return this.inventory;
+    public void addReadiness(int amount) {
+        readiness += amount;
     }
 
-    public String printInventory(){
-        String output = "";
-        for(int i = 0; i< inventory.size(); i++){
-            Item item = inventory.get(i);
-            output = output + ", " + item.toString();
-        }
-        return "["+output+"]";
-    }
-    public void addItem(Item newItem){
-        this.inventory.add(newItem);
+    public boolean hasCleats() {
+        return hasCleats;
     }
 
-    public void removeItem(int index){
-        this.inventory.remove(index);
+    public void obtainCleats() {
+        hasCleats = true;
     }
 
+    public void addItem(Item item) {
+        inventory.add(item);
+    }
 
+    public String inventoryString() {
+        if (inventory.isEmpty()) return "Your bag is empty.";
+        String out = "You are carrying:\n";
+        for (Item i : inventory) out += "- " + i + "\n";
+        return out;
+    }
 }
