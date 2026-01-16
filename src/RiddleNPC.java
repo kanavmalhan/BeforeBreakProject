@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+//Class for all of the NPCs which show a riddle
 public class RiddleNPC extends NonPlayerCharacter {
     private String riddle;
     private String answer;
@@ -15,6 +16,7 @@ public class RiddleNPC extends NonPlayerCharacter {
     }
 
     public void interact(Player player) {
+//Checks if player has already solved the riddles. If he has, then it doesn't show it again
         if (solved) {
             System.out.println(name + " smiles. \"I've already helped you.\"");
             return;

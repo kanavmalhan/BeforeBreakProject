@@ -1,11 +1,11 @@
 public class Coach extends NonPlayerCharacter {
-
+//Constructor
     public Coach() {
         super("Coach Miller");
     }
     
     @Override
-
+//This is how the coach interacts with the player when the player talks to him
     public void interact(Player player) {
         System.out.println("\nCoach Miller looks up from his clipboard.");
         if (player.hasCleats() && player.getReadiness() >= 100 && player.getStamina() >= 20) {
