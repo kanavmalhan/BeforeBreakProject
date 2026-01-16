@@ -1,52 +1,51 @@
 import java.util.Scanner;
 
-public class Game {
+public class Game { //Game class. This is the class which controls the majority of the game
+//Instance variables created
     private Location[][] board;
     private Player player;
     private Scanner input;
-
+//Constructor
     public Game(Scanner input) {
         this.input = input;
-        board = new Location[10][10];
+        board = new Location[Constants.X_SIZE.getValue()][Constants.Y_SIZE.getValue()];
     }
-
+//Function which initializes the game such as the board and the player
     public void init() {
-
-       
-        
-        for (int i = 0; i < 10; i++)
-            for (int j = 0; j < 10; j++)
+    //Iterates throughout the board and sets every location to an empty location
+        for (int i = 0; i < Constants.X_SIZE.getValue(); i++)
+            for (int j = 0; j < Constants.Y_SIZE.getValue(); j++)
                 board[i][j] = new Location("Empty Block", null);
-            
+    // Sets location for Coach's Office
         board[4][4] = new Location("Coach's Office", new Coach());
-        
+    // Sets location for Cleats Store
         board[6][6] = new Location(
             "Cleats Store",
-            new RiddleNPC(
+            new RiddleNPC(//Instantiates the shop owner with a riddle
                 "Shop Owner",
                 "I grip the ground but never move. I have studs but no legs. What am I?",
                 "cleats",
-                new Cleats()
+                new Cleats()//This is the object that will be given to the player
             )
         );
-        
+    // Sets location for Grocery Store
         board[3][7] = new Location(
             "Grocery Store",
-            new RiddleNPC(
+            new RiddleNPC(//Instantiates Cashier at grocery store
                 "Cashier",
-                "What has a heart that doesn’t beat?",
+                "What has a heart that doesn't beat?",
                 "artichoke",
-                new EnergyBar()
+                new EnergyBar()//This is the object that will be given to a player
             )
         );
-
+//Sets Location for GYM
         board[7][3] = new Location(
             "Gym",
             new RiddleNPC(
-                "Trainer",
+                "Trainer", // Trainer NPC instantiated
                 "The more you use it, the stronger it gets. What is it?",
                 "muscle",
-                new Item() {
+                new Item() { //Makes the item which is supposed to be given to the player.
                     public void use(Player p) {
                         p.addReadiness(50);
                         System.out.println("Sweat drips down your face as your body adapts.");
@@ -54,16 +53,29 @@ public class Game {
                 }
             )
         );
+
+        //Introductory messages
         System.out.println("Welcome to " + "MATCHDAY: THE FINAL TRIAL");
         System.out.println("What is your name?");
         String name = this.input.nextLine();
+        //Takes in players name
         System.out.println("Do you want to load in a game from before or start a new game");
+        System.out.println("Type 'load' or type 'new'");
+        //Does a switch case on whether the player wants to load or not load
         String response = this.input.nextLine();
         switch(response){
             case "load":
-                player = SaveManager.load();
-                System.out.println("Hello, " + player.getName());
+                //Checks if the file exists 
+                // If it exists it loads and if not it doesn't
+                if(SaveManager.saveExists()){
+                    player = SaveManager.load();
+                    System.out.println("Hello, " + player.getName());
+                }
+                else{
+                    System.out.println("Save file not found so nothing to load");
+                }
                 break;
+            //If the player wants to play a new game it prints the emssages for the new game. 
             case "new":
                 player = new Player(name);
                 System.out.println("Hello, " + name);
@@ -79,11 +91,12 @@ public class Game {
                 System.out.println("Type 'look' to see where he is");
         }
     }
+    //Update functions. Runs a game loop.
 
     public void update() {
         System.out.print("\n> ");
         String cmd = input.nextLine();
-
+        //Parses command of the user
         switch (cmd) {
             case "move north": 
                 player.move(0, 1); 
@@ -124,14 +137,15 @@ public class Game {
                 break;
         }
     }
-
+/* Iterates throughout entire board using for loop and only looks through named blocks (Not empty). 
+Based on those it checks if it is still visible to the user (Visibility currently set to 5) and prints out directions to those locations */
     private void lookAround() {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
+        for (int i = 0; i < Constants.X_SIZE.getValue(); i++) {
+            for (int j = 0; j < Constants.Y_SIZE.getValue(); j++) {
                 if (!board[i][j].getName().equals("Empty Block")) {
                     int dx = i - player.getX();
                     int dy = j - player.getY();
-                    if (Math.abs(dx) <= 5 && Math.abs(dy) <= 5) {
+                    if (Math.abs(dx) <= Constants.VISIBILITY.getValue() && Math.abs(dy) <= Constants.VISIBILITY.getValue()) {
                         System.out.println(board[i][j].getName() +
                                 " is " + dx + " east/west and " + dy + " north/south.");
                     }
@@ -139,6 +153,8 @@ public class Game {
             }
         }
     }
+
+    //Checks if player is on a location and provides a dialogue which tells the player that it is on the location.
 
     private void isOnLocation(){
         if(!board[player.getX()][player.getY()].getName().equals("Empty Block")){
@@ -179,9 +195,12 @@ public class Game {
         }
     }
 
+    //Prints the map of the city in the console
+    //P = Player, L = Location
+
     private void printMap() {
         for (int y = 9; y >= 0; y--) {
-            for (int x = 0; x < 10; x++) {
+            for (int x = 0; x < Constants.X_SIZE.getValue(); x++) {
                 if (player.getX() == x && player.getY() == y) {
                     System.out.print("[P]");
                 } else if (!board[x][y].getName().equals("Empty Block")) {
@@ -192,5 +211,9 @@ public class Game {
             }
             System.out.println();
         }
+    }
+
+    public String toString(){
+        return "Board: " + this.board + "Player: " + this.player;
     }
 }
