@@ -7,6 +7,7 @@ public class Player extends Character {
     private int readiness;
     private boolean hasCleats;
     private ArrayList<Item> inventory;
+    private ArrayList<Boolean> objectivesCompleted;
 //Constructor when you want to make a new player (When you select the new game option in the beginning)
     public Player(String name) {
         super(name, 100);
@@ -15,6 +16,7 @@ public class Player extends Character {
         this.readiness = 0;
         this.hasCleats = false;
         this.inventory = new ArrayList<>();
+        this.objectivesCompleted = new ArrayList<>();
     }
 //Constructor when you want to load a game from the save file.
     public Player(String name, int stamina, int xLocation, int yLocation, int readiness, boolean hasCleats){
@@ -24,6 +26,10 @@ public class Player extends Character {
         this.readiness = readiness;
         this.hasCleats = hasCleats;
         this.inventory = new ArrayList<>();
+    }
+
+    public void addObjectiveCompleted(Boolean objectiveCompleted){
+        this.objectivesCompleted.add(objectiveCompleted);
     }
 //Move function. Moves wherever you want
     public void move(int dx, int dy) {
