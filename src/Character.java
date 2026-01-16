@@ -20,4 +20,8 @@ public class Character {
         stamina += amount;
         if (stamina < 0) stamina = 0;
     }
+
+    public String toString(){
+        return "Character Name: " + this.name + " Stamina " + this.stamina;
+    }
 }

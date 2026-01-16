@@ -10,4 +10,8 @@ public class Cleats extends Item {
         player.addReadiness(50);
         System.out.println("You lace up the cleats. The ground feels different beneath your feet.");
     }
+
+    public String toString(){
+        return "Cleats name " + this.name;
+    }
 }

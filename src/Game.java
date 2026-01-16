@@ -137,8 +137,8 @@ public class Game { //Game class. This is the class which controls the majority 
                 break;
         }
     }
-    //Iterates throughout entire board using for loop and only looks through named blocks (Not empty). 
-    // Based on those it checks if it is still visible to the user (Visibility currently set to 5) and prints out directions to those locations
+/* Iterates throughout entire board using for loop and only looks through named blocks (Not empty). 
+Based on those it checks if it is still visible to the user (Visibility currently set to 5) and prints out directions to those locations */
     private void lookAround() {
         for (int i = 0; i < Constants.X_SIZE.getValue(); i++) {
             for (int j = 0; j < Constants.Y_SIZE.getValue(); j++) {
@@ -211,5 +211,9 @@ public class Game { //Game class. This is the class which controls the majority 
             }
             System.out.println();
         }
+    }
+
+    public String toString(){
+        return "Board: " + this.board + "Player: " + this.player;
     }
 }

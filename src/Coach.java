@@ -18,4 +18,8 @@ public class Coach extends NonPlayerCharacter {
             System.out.println("Cleats. 100 Readiness. 20 Stamina. Come back when you have all three.");
         }
     }
+
+    public String toString(){
+        return this.name;
+    }
 }
