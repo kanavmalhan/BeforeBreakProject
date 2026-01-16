@@ -16,6 +16,15 @@ public class Player extends Character {
         this.inventory = new ArrayList<>();
     }
 
+    public Player(String name, int stamina, int xLocation, int yLocation, int readiness, boolean hasCleats){
+        super(name, stamina);
+        this.x = xLocation;
+        this.y = yLocation;
+        this.readiness = readiness;
+        this.hasCleats = hasCleats;
+        this.inventory = new ArrayList<>();
+    }
+
     public void move(int dx, int dy) {
         x += dx;
         y += dy;
